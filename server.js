@@ -21,7 +21,7 @@ const onlinePlayers = {};
 const playerStatus = {};
 const inGame = {};
 
-app.set('socketIO', io);
+app.set('socketio', io);
     io.on("connection", (socket) => {
         
         console.log('new socket connected', socket.id);
@@ -103,3 +103,11 @@ app.set('socketIO', io);
         delete playerStatus[socket.id];
     });
 });
+
+if(process.env.NODE_ENV == "production"){
+    app.use(express.static("T3/build"));
+
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'T3', 'build', 'index.html'));
+    });
+}
