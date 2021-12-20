@@ -10,7 +10,7 @@ body {
 
 .contents {
   height: 80vh;
-  width: 60vw;
+  width: 100vw;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -78,30 +78,12 @@ body {
   grid-column: 1/4;
   grid-row: 1/2;
 }
-.rooms {
-  border-radius: 10px;
-  border: 5px solid rgb(223, 59, 86);
-  color: rgb(223, 59, 86);
-  width: 100%;
-  margin: 1%;
-  padding: 0%;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 400%;
-  background: white;
-  opacity: 0.8;
-}
 
-.rooms:hover {
-  opacity: 1;
-  color: white;
-  background: rgb(223, 59, 86);
-}
-
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .contents {
     width: 100vw;
   }
-}
+} */
 
 .entry-field {
   font-family: fantasy;
@@ -134,7 +116,6 @@ body {
 .startButton:hover {
   background: rgb(211, 41, 66);
 }
-
 .creator {
   background-color: rgb(141, 63, 76);
   color: rgba(255, 255, 255, 0.822);
@@ -147,8 +128,100 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-.online-players {
-  background-color: cadetblue;
+.player-list {
+  border: 2px solid #b6416c;
+  box-shadow: 2px 2px 10px black;
+  width: 100vw;
+  border-radius: 10px;
+  padding-left: 10px;
+  background-color: black;
+  color: lightgreen;
+  margin-bottom: 5px;
+}
+.landing {
+  padding: 5px;
+  /* border-radius: 50%; */
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  animation-name: landingPage;
+  animation-duration: 4s;
+  animation-iteration-count: 2;
+}
+
+@keyframes landingPage {
+  0% {
+    background-color: black;
+    color: white;
+  }
+  50% {
+    background-color: #b6416c;
+    color: black;
+  }
+  100% {
+    background-color: black;
+    color: white;
+  }
+}
+
+@keyframes landingPageText {
+  0% {
+    left: -50%;
+    text-shadow: 10px 10px 5px black;
+  }
+  50% {
+    left: 50%;
+    transform: scale(2);
+    text-shadow: 8px -8px 15px black;
+  }
+  100% {
+    left: -100%;
+    transform: scale(10);
+    text-shadow: -4px -4px 5px black;
+  }
+}
+
+.landing div {
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-family: cursive;
+  animation-name: landingPageText;
+  animation-duration: 4s;
+  animation-iteration-count: 1;
+}
+
+.player-name {
+  font-size: large;
+  display: inline;
+}
+.player-status {
+  cursor: pointer;
+  float: right;
+  padding: 4px;
+  border-radius: 10px;
+  background-color: green;
+  display: inline;
+}
+
+.refresh-button {
+  color: lightgreen;
+  text-align: center;
+  margin: 10px auto;
+  /* font-size: 200%; */
+  transition-duration: 0.3s;
+  padding: 10px;
+  background-color: black;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 2px 2px 10px black;
+  width: 50vw;
+}
+
+.refresh-button:hover {
+  transform: scale(1.05);
 }
 
 .myboard {
@@ -156,34 +229,92 @@ body {
   height: auto;
 }
 
-.grid {
-  padding: 2%;
-  border-radius: 10px;
-  border: 3px solid rgb(211, 41, 66);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 3px;
+.onlinePlayers {
   width: 100vw;
-  height: auto;
 }
 
-.grid div {
-  width: 100%;
-  height: 0%;
-  padding-bottom: 100%;
-  background: white;
+.container {
+  margin: 0 auto;
+  width: 100vw;
+  /* border: 2px solid yellow; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.grid div:last-child:nth-child(3n - 1) {
-  grid-column: span 2;
-  height: auto;
-  padding-bottom: 0;
-}
+.item {
+  border-radius: 10px;
+  box-shadow: -2px -2px 10px black;
+  /* border: 2px double #b6416c; */
+  background-color: #b6416c;
 
-@media (min-width: 400px) {
-  .grid {
+  padding: 0;
+  margin: 0 0 7px 0;
+  width: 30%;
+  padding-bottom: 30%; /* Same as width, sets height */
+  position: relative;
+}
+.item div {
+  font-family: cursive;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10vw;
+}
+.item:hover {
+  background-color: grey;
+}
+@media screen and (min-width: 420px) {
+  .container {
     width: 50vw;
   }
 }
+
+/* 
+3ek151
+49EK201
+35EK100
+11EK100
+
+
+#Ishaan IT, [20-12-2021 23:15]
+[Forwarded from TrueGrabbers™ - Loots, Deals, PriceDrops]
+[ Photo ]
+🔴 Loot Back for Limited Time!
+
+CoinDCX Loot for New Users : Get BitCoin worth ₹151 for FREE to start your Crypto Journey.
+
+Follow These Steps :
+
+1. Download CoinDCX App : https://app.adjust.net.in/t4qf3aj
+
+2. Register & Use Code : 3EK151
+
+**You’ll find an option to enter code on homepage
+
+T&C : http://bit.ly/CoinDCX-TnC
+
+Extra : 1 Lucky Winner would get ₹5000 Worth of Bitcoin - Offer valid on First Transaction. Valid till 31st Dec, 2021.
+
+Also, Try below codes as well to get extra BTC in your Account. (Valid for Old Users)
+
+📌 COIN100
+📌 PAYTM100
+📌 PAISA150
+📌 PAISA100
+📌 INSHORTS100
+📌 DCX150
+📌 PYTM100AK
+
+➡️ You can Trade Upto 10,000₹ Without KYC & Then KYC is Required Above 10,000₹ Trading.
+
+#Ishaan IT, [20-12-2021 23:15]
+Try kr lijiega
+
+Atif, [20-12-2021 23:15]
+jaan abe
+
+#Ishaan IT, [20-12-2021 23:16]
+11EK100 */

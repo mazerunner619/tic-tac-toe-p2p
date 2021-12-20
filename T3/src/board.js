@@ -6,10 +6,16 @@ import './App.css';
 import RequestModal from './requestModal'
 import { checkboxClasses } from '@mui/material';
 import { keys } from '@mui/system';
+import AlertMessage from './Alerts';
+import {HiRefresh} from 'react-icons/hi'
+import {FcRefresh} from 'react-icons/fc'
+
 
 let socket;
 
 export default function Board(){
+
+    const [landing, setLanding] = useState("block");
     const [turn, setTurn] = useState(false);
     const [count, setCount] = useState(0); 
     const [mark, setMark] = useState(new Array(9).fill(""));
@@ -30,6 +36,11 @@ export default function Board(){
         name : null
     }); 
 
+    const [alertMessage, setAlertMessage] = useState({
+        open : false,
+        message : "",
+        severity : ""           // error warning information success
+    });
     const [onlinePlayers, setOnlinePlayers] = useState([]);
     function reset(){
         setTurn(false);
@@ -38,8 +49,8 @@ export default function Board(){
         setplayerA(0);
         setplayerB(0);
         setTie(0);
-        setD1(true);
-        setD2(false);
+        setD1(false);
+        setD2(true);
         setD3(false);
         setOne(false);
         setResult("the battle is on ...");
@@ -52,6 +63,10 @@ export default function Board(){
 
  
     // let onlinePlayers = [];
+
+    useEffect(()=>{
+        setTimeout(()=>setLanding("none"),4000);
+    }, []);
 
     useEffect(() => {
         if(socket){
@@ -71,6 +86,11 @@ export default function Board(){
                 }
             });
     socket.on("request-accepted", data =>{
+        setAlertMessage({
+            open : true,
+            message : `${data.playerName} accepted your challenge`,
+            severity : "success"
+        });
             setCount(0);
             setOne(true);
             setTurn(true);
@@ -79,12 +99,23 @@ export default function Board(){
     });        
 
         socket.on("request-rejected", data =>{
+            setAlertMessage({
+                open : true,
+                message : `${data.playerName} declined to accept your challenge`,
+                severity : "error"
+            });
+            
             console.log(data.playerName+' rejected your request');
             setOpponent({id : null, name : null});
             //waiting over
         });
 
         socket.on("receive-request", data =>{
+            setAlertMessage({
+                open : true,
+                message : `${data.playerName} wants to challenge you`,
+                severity : "information"
+            });
             setOpponent({id : data.playerId, name : data.playerName});
             setPopup(true);
         });      
@@ -100,7 +131,11 @@ export default function Board(){
         });  
 
         socket.on("tie", () => {
-            showTie();
+            setAlertMessage({
+                open : true,
+                message : "impressive !.... a TIE",
+                severity : "information"
+            })
             setTie(prev=>prev+1);
             setTurn(true);
             setOne(true);
@@ -109,44 +144,41 @@ export default function Board(){
         });
 
         socket.on("won", ()=>{
+            setAlertMessage({
+                open : true,
+                message : "you loser !",
+                severity : "warning"
+            });
             setMark(new Array(9).fill(""));
             setTurn(false);
             setOne(false);
             setplayerB(prev=>prev+1);
             setCount(0);
-            showResult("LOST");
         });        
 
         socket.on("exit-game", (data) => {
-            alert('the opponent left....');
+            setAlertMessage({
+                open : true,
+                message : `opponent left !`,
+                severity : "error"
+            });
             reset();
         });
         return ()=> socket.off();  
       }
     });
 
-    function showResult(res){
-        setResult(`you ${res} the match`);
-        setTimeout(()=>setResult("the battle is on..."), 5000);
-    }
-
-    
-    function showTie(){
-        setResult(`impressive..........that was a TIE !`);
-        setTimeout(()=>setResult("the battle is on..."), 4000);
-    }
-
     function refreshList(){
         socket.emit("refresh-list", {socketId : socket.id, playerName : nameA});
     }
 
     function exitGame(e){
-        alert('exit game');
-        setD3(false);
-        setD2(true);
-        setOpponent({id :null, name : null});
-        setCount(0);
-        setTurn(false);
+        setAlertMessage({
+            open : true,
+            message : `you left the game `,
+            severity : "warning"
+        });
+        reset();
         socket.emit("exit-game", {from : socket.id, to : opponent.id});
     }
     function acceptRequest(){
@@ -164,7 +196,11 @@ export default function Board(){
     }
     //to = {playerId, playerName}
     function sendRequest(to){
-        console.log('sending request to', to);
+        setAlertMessage({
+            open : true,
+            message : `request sent to ${to.playerName}`,
+            severity : "success"
+        });
         socket.emit("send-request", {from : socket.id,  to : to.playerId});
         setOpponent({id : to.playerId, name : to.playerName});
     }
@@ -172,7 +208,8 @@ export default function Board(){
     function enterTheGame() {
         if(nameA){
             
-          socket = SocketClient('https://thet3game.herokuapp.com/', { transports : ['websocket']});
+          socket = SocketClient('http://localhost:5000/');
+        //   socket = SocketClient('https://thet3game.herokuapp.com/', { transports : ['websocket']});
             socket.on("connect", ()=>{
                 socket.emit("im-in",{playerName : nameA});
             });
@@ -194,12 +231,16 @@ export default function Board(){
              (mark[0]===myChar && mark[4]===myChar && mark[8]===myChar) ||
              (mark[2]===myChar && mark[4]===myChar && mark[6]===myChar) 
             ){
+                setAlertMessage({
+                    open : true,
+                    message : "you won !",
+                    severity : "success"
+                });
                 setplayerA(prev => prev+1);
                 setTurn(true);
                 setOne(true);
                 setCount(0);
                 setMark(new Array(9).fill(""));
-                showResult("WON");
                 socket.emit("won", {from : socket.id, to : opponent.id});
                 return true;
             };
@@ -215,12 +256,16 @@ export default function Board(){
                     return;
                 setCount( prev => prev+1);
                 if(count === 4){
-                    showTie();
                     setCount(0);
                     setOne(false);
                     setTurn(false);
                     setTie(prev => prev+1);
                     setMark(new Array(9).fill(""));
+                    setAlertMessage({
+                        open : true,
+                        message : "impressive !.... a TIE",
+                        severity : "information"
+                    })
                     socket.emit("tie", {from : socket.id, to : opponent.id});
                     return; 
                 }
@@ -239,7 +284,16 @@ export default function Board(){
     }
 
     return(
-        <div className="contents">
+
+        <div>
+
+<div className = "landing" style={{display : landing}}>
+
+    <div> Let's TIC-TAC-TOE</div>
+
+</div>
+
+        <div className="contents" style={{display : !landing}}>            
         <form className = "nameInput" style = {{ display : D1?"block":"none" } } > 
                     <input id ="A" className="entry-field" name ="playerA" type = "text" placeholder = "your name" required  onChange = { (e)=>setNameA(e.target.value)}/>
                     <Button
@@ -250,45 +304,84 @@ export default function Board(){
 
          <div className="heading">Tic  Tac Toe</div>
 <div className='onlinePlayers' style={{display : D2?"block":"none"}}>
-    <div className="refresh-button" onClick={refreshList}>
-        Refresh
-    </div>
 
-    {/* <div className = "list"> */}
         <Container>
     {
+            !onlinePlayers.length ? 
+            (
+                <div style={{color : "green",fontFamily : "fantasy", fontSize : "200%" ,margin : "0 auto"}}>no one is online.....</div>
+            )
+            :
         onlinePlayers.map( to => 
-            <Row onClick={()=>sendRequest(to)}>
-                <Col md={6} lg={6} sm={6}>{to.playerName}</Col>
-                <Col md={6} lg={6} sm={6}>{
+            <div className = "player-list">
+                <div className = "player-name">{to.playerName}</div>
+                <div className = "player-status" style={{background : to.playerStatus?"red":"green"}} onClick={()=>{
+                if(to.playerStatus)
+                    return;
+                sendRequest(to);
+            }}>{
                 (to.playerStatus === false)?
-                "send request"
+                "challenge"
                 :
                 "in a match"
-                }</Col>
-            </Row>    
+                }</div>
+
+            </div>    
         )
     }
     </Container>
+
+    <div className="refresh-button" onClick={refreshList}>
+                <FcRefresh />Refresh
+    </div>
     {/* </div> */}
 </div>
 
 <div className = "myboard" style = {{ display : D3?"block":"none" } } >
-<div className="grid">
-    <div onMouseDown = {()=>makeMove(0)}>{mark[0]}</div>
-    <div onMouseDown = {()=>makeMove(1)}>{mark[1]}</div>
-    <div onMouseDown = {()=>makeMove(2)}>{mark[2]}</div>
-    <div onMouseDown = {()=>makeMove(3)}>{mark[3]}</div>
-    <div onMouseDown = {()=>makeMove(4)}>{mark[4]}</div>
-    <div onMouseDown = {()=>makeMove(5)}>{mark[5]}</div>
-    <div onMouseDown = {()=>makeMove(6)}>{mark[6]}</div>
-    <div onMouseDown = {()=>makeMove(7)}>{mark[7]}</div>
-    <div onMouseDown = {()=>makeMove(8)}>{mark[8]}</div>
+
+<div className="container" style={{fontSize : ""}}>
+    <div className="item" onMouseDown = {()=>makeMove(0)}>
+        <div>{mark[0]}</div>
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(1)}>
+    <div>{mark[1]}</div>
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(2)}>
+    <div>{mark[2]}</div>
+        
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(3)}>
+    <div>{mark[3]}</div>
+        
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(4)}>
+    <div>{mark[4]}</div>
+
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(5)}>
+    <div>{mark[5]}</div>
+
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(6)}>
+    <div>{mark[6]}</div>
+
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(7)}>
+    <div>{mark[7]}</div>
+
+    </div>
+    <div className="item" onMouseDown = {()=>makeMove(8)}>
+    <div>{mark[8]}</div>
+    </div>
 </div>
 </div> 
                 <div className="pointsT" style={{display : D3?"block":"none"}}>
                     <h2>{turn ? "Your turn":`${opponent.name}'s Turn`}</h2>
-                <h3>{nameA} {playerA}<br/>{opponent.name} {playerB} <br/>Ties {tie}</h3>
+                <h3 style={{color : "green"}}>{nameA} {playerA}</h3>
+                {/* <br/> */}
+                <h3 style={{color : "red"}}>{opponent.name} {playerB} </h3>
+                {/* <br/> */}
+                <h3 style={{color : "orange"}}>Ties {tie}</h3>
                 <Button variant = "outlined" color = "success" onClick = {exitGame}>Exit Game</Button>
                 <p>{result}</p>
                  </div>
@@ -300,85 +393,14 @@ export default function Board(){
     onAccept = {acceptRequest}
     onReject = {rejectRequest}
 />
+
+<AlertMessage
+    open = {alertMessage.open}
+    message = {alertMessage.message}
+    severity = {alertMessage.severity}
+    onClose = {()=>setAlertMessage({...alertMessage, open : false})}
+/>
+    </div>
     </div>
 )
 }
-
-
-// <h className="creator">.... A t i f</h> 
-
-
-//  <button onMouseDown = {checkMove} className =  "rooms"  value = "1" >{mark[0]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms" value = "2" >{mark[1]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms" value = "3"  >{mark[2]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms"  value = "4" >{mark[3]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms"  value = "5" >{mark[4]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms" value = "6" >{mark[5]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms"  value = "7" >{mark[6]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms"  value = "8" >{mark[7]}</button>
-//  <button onMouseDown = {checkMove} className =  "rooms"  value = "9" >{mark[8]}</button> 
- // function checkMe() {
-    //     if( ( mark[0]==="X" && mark[1]==="X" && mark[2]==="X") ||
-    //          (mark[3]==="X" && mark[4]==="X" && mark[5]==="X") ||
-    //          (mark[6]==="X" && mark[7]==="X" && mark[8]==="X") ||
-    //          (mark[0]==="X" && mark[3]==="X" && mark[6]==="X") ||
-    //          (mark[1]==="X" && mark[4]==="X" && mark[7]==="X") ||
-    //          (mark[2]==="X" && mark[5]==="X" && mark[8]==="X") ||
-    //          (mark[0]==="X" && mark[4]==="X" && mark[8]==="X") ||
-    //          (mark[2]==="X" && mark[4]==="X" && mark[6]==="X") 
-    //         ){
-    //             setplayerA(prev => prev+1);
-    //             setCount(0);
-    //             setMark(new Array(9).fill(''));
-    //             alert(nameA+" won !!!!");
-    //             // flag = 0;
-    //         }
-    //         else return;
-    // }
-
-    // function checkOpponent() {
-
-    //     if( ( mark[0]==="O" && mark[1]==="O" && mark[2]==="O") ||
-    //          (mark[3]==="O" && mark[4]==="O" && mark[5]==="O") ||
-    //          (mark[6]==="O" && mark[7]==="O" && mark[8]==="O") ||
-    //          (mark[0]==="O" && mark[3]==="O" && mark[6]==="O") ||
-    //          (mark[1]==="O" && mark[4]==="O" && mark[7]==="O") ||
-    //          (mark[2]==="O" && mark[5]==="O" && mark[8]==="O") ||
-    //          (mark[0]==="O" && mark[4]==="O" && mark[8]==="O") ||
-    //          (mark[2]==="O" && mark[4]==="O" && mark[6]==="O") 
-    //         ){
-    //             alert(opponent.name+" won !!!!");
-    //             setplayerB(prev => prev+1);
-    //             setMark(new Array(9).fill(''));
-    //             setCount(0);
-    //             // flag = 0;
-    //         }
-    //         else return;
-    // }
-    // function checkMove(e){
-    //     let val = e.target.value-1;
-    //     if(mark[val] === "X" || mark[val] === "O" )
-    //         return;
-    //     if(count%2){
-    //         //player B
-    //         if(mark[val]==='')
-    //             mark[val] = "O";
-    //         checkB(); 
-    //     }
-    //     else
-    //     {
-    //         //player A
-    //       if(mark[val] === '')
-    //       mark[val] = "X";
-    //       checkA();  
-    //     }
-
-    //     setCount(prev => prev+1);
-        // if(count === 8){
-        //     setMark(new Array(9).fill(''));
-        //     setTie(prev => prev+1);
-        //     setCount(0);
-        //     alert("Its a TIE !!!");
-        // }
-    // }
-

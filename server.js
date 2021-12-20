@@ -50,7 +50,8 @@ app.set('socketio', io);
     socket.on("accept-request", (data)=>{
         console.log('accept request',data);
         playerStatus[data.from] = true; 
-        playerStatus[data.to] = true; 
+        playerStatus[data.to] = true;
+        inGame[data.from] = data.to;
         io.to(data.from).emit("request-accepted", {playerId : data.to, playerName : onlinePlayers[data.to]});
         io.emit("refresh-list", {onlinePlayers, playerStatus});
     });
@@ -70,6 +71,10 @@ app.set('socketio', io);
         socket.on("exit-game", data => {
             playerStatus[data.from] = false;
             playerStatus[data.to] = false;
+            if(inGame[data.from])
+                delete inGame[data.from];
+            else if(inGame[data.to])
+                delete inGame[data.to];
             io.to(data.to).emit("exit-game", {playerId : data.from, playerName : onlinePlayers[data.from]});
             io.emit("refresh-list", {onlinePlayers, playerStatus});
         });
@@ -85,28 +90,32 @@ app.set('socketio', io);
 
     socket.on("disconnect", ()=>{
         console.log(socket.id, 'disconnected');
+        delete onlinePlayers[socket.id];
+        delete playerStatus[socket.id];
         socket.broadcast.emit('player-left', {playerId : socket.id, playerName : onlinePlayers[socket.id]});
         let ele = inGame[socket.id];
         if(ele){
+            console.log(onlinePlayers[socket.id]," left during a match with ", onlinePlayers[ele]);
             playerStatus[ele] = false;
+            delete inGame[socket.id];
             io.to(ele).emit("exit-game", {playerId : socket.id, playerName : onlinePlayers[socket.id]});
         }
         else{
             const keyArray = Object.keys(inGame);
             ele = keyArray.find( x => inGame[x] === socket.id);
             if(ele){
+                console.log(onlinePlayers[socket.id], " left during a match with ", onlinePlayers[ele]);
                 playerStatus[ele] = false;
+                delete inGame[ele];
                 io.to(ele).emit("exit-game", {playerId : socket.id, playerName : onlinePlayers[socket.id]});
             }
         }
-        delete onlinePlayers[socket.id];
-        delete playerStatus[socket.id];
+        io.emit("refresh-list", {onlinePlayers, playerStatus});
     });
 });
 
 if(process.env.NODE_ENV == "production"){
     app.use(express.static("T3/build"));
-
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(__dirname, 'T3', 'build', 'index.html'));
     });
