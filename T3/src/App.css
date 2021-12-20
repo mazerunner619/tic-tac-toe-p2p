@@ -1,0 +1,189 @@
+html,
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  background: grey;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.contents {
+  height: 80vh;
+  width: 60vw;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 1%;
+  justify-content: center;
+}
+
+.square {
+  /* display: inline; */
+  /* float: right; */
+  position: relative;
+  width: 100%;
+  margin: 0;
+  background-color: #b6416c;
+  float: left;
+}
+
+.square:after {
+  margin: 0;
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.content {
+  display: inline;
+  border: 1px solid yellow;
+  background-color: #b6416c;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.nameInput {
+  grid-column: 1/4;
+  grid-row: 2/3;
+  padding: 3%;
+}
+
+.pointsT {
+  border-radius: 10px;
+  border: 5px solid rgb(223, 59, 86);
+  background: white;
+  color: green;
+  color: rgb(223, 59, 86);
+  text-align: center;
+  word-spacing: ;
+  font-family: fantasy;
+  grid-column: 1/4;
+  padding: 0;
+  grid-row: 5/6;
+}
+.heading {
+  box-shadow: 5px 5px 50px 5px rgb(148, 80, 80);
+  background-color: rgb(141, 63, 76);
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgba(255, 255, 255, 0.822);
+  margin: 0 0 1% 0;
+  grid-column: 1/4;
+  grid-row: 1/2;
+}
+.rooms {
+  border-radius: 10px;
+  border: 5px solid rgb(223, 59, 86);
+  color: rgb(223, 59, 86);
+  width: 100%;
+  margin: 1%;
+  padding: 0%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 400%;
+  background: white;
+  opacity: 0.8;
+}
+
+.rooms:hover {
+  opacity: 1;
+  color: white;
+  background: rgb(223, 59, 86);
+}
+
+@media screen and (max-width: 768px) {
+  .contents {
+    width: 100vw;
+  }
+}
+
+.entry-field {
+  font-family: fantasy;
+  font-size: 300%;
+  border: 3px solid rgb(223, 59, 86);
+  border-radius: 10px;
+  color: rgb(212, 86, 107);
+  text-align: center;
+  margin: 2% auto;
+  display: block;
+  width: 70%;
+}
+.entry-field:hover {
+  width: 100%;
+  transition-duration: 0.2s;
+}
+.entry-label {
+  text-align: center;
+  font-size: 30px;
+  font-family: fantasy;
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.startButton {
+  width: 100%;
+}
+
+.startButton:hover {
+  background: rgb(211, 41, 66);
+}
+
+.creator {
+  background-color: rgb(141, 63, 76);
+  color: rgba(255, 255, 255, 0.822);
+
+  text-align: right;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.online-players {
+  background-color: cadetblue;
+}
+
+.myboard {
+  width: 100vw;
+  height: auto;
+}
+
+.grid {
+  padding: 2%;
+  border-radius: 10px;
+  border: 3px solid rgb(211, 41, 66);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 3px;
+  width: 100vw;
+  height: auto;
+}
+
+.grid div {
+  width: 100%;
+  height: 0%;
+  padding-bottom: 100%;
+  background: white;
+}
+
+.grid div:last-child:nth-child(3n - 1) {
+  grid-column: span 2;
+  height: auto;
+  padding-bottom: 0;
+}
+
+@media (min-width: 400px) {
+  .grid {
+    width: 50vw;
+  }
+}
