@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+
 html,
 body {
   margin: 0;
@@ -58,8 +60,8 @@ body {
   color: green;
   color: rgb(223, 59, 86);
   text-align: center;
-  word-spacing: ;
-  font-family: fantasy;
+  /* word-spacing: ; */
+  font-family: "Montserrat", sans-serif;
   grid-column: 1/4;
   padding: 0;
   grid-row: 5/6;
@@ -86,7 +88,7 @@ body {
 } */
 
 .entry-field {
-  font-family: fantasy;
+  font-family: "Montserrat", sans-serif;
   font-size: 300%;
   border: 3px solid rgb(223, 59, 86);
   border-radius: 10px;
@@ -103,7 +105,7 @@ body {
 .entry-label {
   text-align: center;
   font-size: 30px;
-  font-family: fantasy;
+  font-family: "Montserrat", sans-serif;
   display: block;
   width: 50%;
   margin: 0 auto;
@@ -129,14 +131,17 @@ body {
 }
 
 .player-list {
-  border: 2px solid #b6416c;
-  box-shadow: 2px 2px 10px black;
+  /* border: 2px solid #b6416c; */
   width: 100vw;
   border-radius: 10px;
   padding-left: 10px;
   background-color: black;
   color: lightgreen;
   margin-bottom: 5px;
+  transition-duration: 0.2s;
+}
+.player-list:hover {
+  box-shadow: 2px 2px 8px black;
 }
 .landing {
   padding: 5px;
@@ -185,25 +190,28 @@ body {
   transform: translate(-50%, -50%);
   color: white;
   text-decoration: wavy;
-  font-family: cursive;
+  font-family: "Montserrat", sans-serif;
   animation-name: landingPageText;
   animation-duration: 4s;
   animation-iteration-count: 1;
 }
 
 .player-name {
+  font-family: "Montserrat", sans-serif;
+  height: 100%;
   font-size: large;
   display: inline;
 }
 .player-status {
   cursor: pointer;
+  box-shadow: 2px -2px 5px black;
   float: right;
-  padding: 4px;
+  padding: 1%;
+  height: 100%;
   border-radius: 10px;
   background-color: green;
   display: inline;
 }
-
 .refresh-button {
   color: lightgreen;
   text-align: center;
@@ -214,12 +222,12 @@ body {
   background-color: black;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 2px 2px 10px black;
   width: 50vw;
 }
 
 .refresh-button:hover {
   transform: scale(1.05);
+  box-shadow: 2px 2px 5px black;
 }
 
 .myboard {
@@ -269,51 +277,3 @@ body {
     width: 50vw;
   }
 }
-
-/* 
-
-3ek151
-49EK201
-35EK100
-11EK100
-
-
-#Ishaan IT, [20-12-2021 23:15]
-[Forwarded from TrueGrabbers™ - Loots, Deals, PriceDrops]
-[ Photo ]
-🔴 Loot Back for Limited Time!
-
-CoinDCX Loot for New Users : Get BitCoin worth ₹151 for FREE to start your Crypto Journey.
-
-Follow These Steps :
-
-1. Download CoinDCX App : https://app.adjust.net.in/t4qf3aj
-
-2. Register & Use Code : 3EK151
-
-**You’ll find an option to enter code on homepage
-
-T&C : http://bit.ly/CoinDCX-TnC
-
-Extra : 1 Lucky Winner would get ₹5000 Worth of Bitcoin - Offer valid on First Transaction. Valid till 31st Dec, 2021.
-
-Also, Try below codes as well to get extra BTC in your Account. (Valid for Old Users)
-
-📌 COIN100
-📌 PAYTM100
-📌 PAISA150
-📌 PAISA100
-📌 INSHORTS100
-📌 DCX150
-📌 PYTM100AK
-
-➡️ You can Trade Upto 10,000₹ Without KYC & Then KYC is Required Above 10,000₹ Trading.
-
-#Ishaan IT, [20-12-2021 23:15]
-Try kr lijiega
-
-Atif, [20-12-2021 23:15]
-jaan abe
-
-#Ishaan IT, [20-12-2021 23:16]
-11EK100 */

@@ -10,7 +10,6 @@ import AlertMessage from './Alerts';
 import {HiRefresh} from 'react-icons/hi'
 import {FcRefresh} from 'react-icons/fc'
 
-
 let socket;
 
 export default function Board(){
@@ -35,6 +34,9 @@ export default function Board(){
         id : null,
         name : null
     }); 
+
+    const avatar1 = "❌";
+    const avatar2 = "⭕";
 
     const [alertMessage, setAlertMessage] = useState({
         open : false,
@@ -90,10 +92,10 @@ export default function Board(){
             open : true,
             message : `${data.playerName} accepted your challenge`,
             severity : "success"
-        });
-            setCount(0);
+            });
             setOne(true);
             setTurn(true);
+            setCount(0);
             setD3(true);
             setD2(false);
     });        
@@ -104,12 +106,10 @@ export default function Board(){
                 message : `${data.playerName} declined to accept your challenge`,
                 severity : "error"
             });
-            
             console.log(data.playerName+' rejected your request');
             setOpponent({id : null, name : null});
             //waiting over
         });
-
         socket.on("receive-request", data =>{
             setAlertMessage({
                 open : true,
@@ -126,7 +126,7 @@ export default function Board(){
 
         //data here is index of the 9x9 box
         socket.on("opponent-move", data => {
-            mark[data] = one?"O":"X";
+            mark[data] = one?avatar2:avatar1;
             setTurn(true);
         });  
 
@@ -146,7 +146,7 @@ export default function Board(){
         socket.on("won", ()=>{
             setAlertMessage({
                 open : true,
-                message : "you loser !",
+                message : "you lost !",
                 severity : "warning"
             });
             setMark(new Array(9).fill(""));
@@ -154,7 +154,7 @@ export default function Board(){
             setOne(false);
             setplayerB(prev=>prev+1);
             setCount(0);
-        });        
+        });
 
         socket.on("exit-game", (data) => {
             setAlertMessage({
@@ -207,20 +207,19 @@ export default function Board(){
 
     function enterTheGame() {
         if(nameA){
-        //   socket = SocketClient('http://localhost:5000/');
-          socket = SocketClient('https://thet3game.herokuapp.com/', { transports : ['websocket']});
+          socket = SocketClient('http://localhost:5000/');
+        //   socket = SocketClient('https://thet3game.herokuapp.com/', { transports : ['websocket']});
             socket.on("connect", ()=>{
                 socket.emit("im-in",{playerName : nameA});
             });
             setD1(false);
             setD3(false);
             setD2(true);
-            // setDispInput('none')
         }
     }
 
     function checkResult(){
-        const myChar = one ? "X":"O";
+        const myChar = one ? avatar1:avatar2;
             if( ( mark[0]===myChar && mark[1]===myChar && mark[2]===myChar) ||
              (mark[3]===myChar && mark[4]===myChar && mark[5]===myChar) ||
              (mark[6]===myChar && mark[7]===myChar && mark[8]===myChar) ||
@@ -236,32 +235,33 @@ export default function Board(){
                     severity : "success"
                 });
                 setplayerA(prev => prev+1);
-                setTurn(true);
-                setOne(true);
-                setCount(0);
-                setMark(new Array(9).fill(""));
-                socket.emit("won", {from : socket.id, to : opponent.id});
-                return true;
+                    setTurn(true);
+                    setOne(true);
+                    socket.emit("won", {from : socket.id, to : opponent.id});
+                    setCount(0);
+                    setMark(new Array(9).fill(""));
+                    return true;
             };
             return false;
     }
 
     async function makeMove(boxNo){
-        if(turn && mark[boxNo] === ""){
+        if(turn && mark[boxNo] === ""){  
+            setTurn(false);
             if(one){
-                setTurn(false);
-                mark[boxNo] = "X";
+                // setTurn(false);
+                mark[boxNo] = avatar1;
                 if(checkResult())
                     return;
                 setCount( prev => prev+1);
                 if(count === 4){
                     setCount(0);
                     setOne(false);
-                    setTurn(false);
+                    // setTurn(false);
                     setTie(prev => prev+1);
                     setMark(new Array(9).fill(""));
                     setAlertMessage({
-                        open : true,
+                        open : true,    
                         message : "impressive !.... a TIE",
                         severity : "information"
                     })
@@ -270,38 +270,36 @@ export default function Board(){
                 }
                 socket.emit("opponent-move", {playerId : opponent.id, index : boxNo});
             }else{
-                setTurn(false);
-                mark[boxNo] = "O";
+                // setTurn(false);
+                mark[boxNo] = avatar2;
                 if(checkResult()){
-                    // socket.emit("opponent-move", {playerId : opponent.id, index : boxNo});
                     return;
                 }
                 socket.emit("opponent-move", {playerId : opponent.id, index : boxNo});
-
             }
         }
     }
 
+  
     return(
-
         <div>
-
 <div className = "landing" style={{display : landing}}>
 
     <div> Let's TIC-TAC-TOE</div>
-
 </div>
 
         <div className="contents" style={{display : !landing}}>            
         <form className = "nameInput" style = {{ display : D1?"block":"none" } } > 
-                    <input id ="A" className="entry-field" name ="playerA" type = "text" placeholder = "your name" required  onChange = { (e)=>setNameA(e.target.value)}/>
+                    <input id ="A" className="entry-field" autoComplete = "off"  name ="playerA" type = "text" placeholder = "your name" required  onChange = { (e)=>setNameA(e.target.value)}/>
                     <Button
                     variant = "contained"
                     className="startButton"
                     color="secondary" onClick = { enterTheGame }>Battle</Button>
          </form>
 
-         <div className="heading">Tic  Tac Toe</div>
+         <div className="heading">
+             Tic  Tac Toe
+        </div>
 <div className='onlinePlayers' style={{display : D2?"block":"none"}}>
 
         <Container>
