@@ -207,9 +207,8 @@ export default function Board(){
 
     function enterTheGame() {
         if(nameA){
-            
-          socket = SocketClient('http://localhost:5000/');
-        //   socket = SocketClient('https://thet3game.herokuapp.com/', { transports : ['websocket']});
+        //   socket = SocketClient('http://localhost:5000/');
+          socket = SocketClient('https://thet3game.herokuapp.com/', { transports : ['websocket']});
             socket.on("connect", ()=>{
                 socket.emit("im-in",{playerName : nameA});
             });

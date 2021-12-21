@@ -165,28 +165,26 @@ body {
 }
 
 @keyframes landingPageText {
-  0% {
-    left: -50%;
+  from {
+    font-size: 0;
+    filter: blur(3px);
     text-shadow: 10px 10px 5px black;
   }
-  50% {
-    left: 50%;
-    transform: scale(2);
-    text-shadow: 8px -8px 15px black;
-  }
-  100% {
-    left: -100%;
-    transform: scale(10);
+  to {
+    filter: blur(0px) brightness(2000%);
+    font-size: 150%;
     text-shadow: -4px -4px 5px black;
   }
 }
 
 .landing div {
-  padding: 10px;
+  padding: 20px;
   position: absolute;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   color: white;
+  text-decoration: wavy;
   font-family: cursive;
   animation-name: landingPageText;
   animation-duration: 4s;
@@ -273,6 +271,7 @@ body {
 }
 
 /* 
+
 3ek151
 49EK201
 35EK100
