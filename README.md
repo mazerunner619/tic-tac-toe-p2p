@@ -2,16 +2,16 @@
 checkout the deployed version here
 https://thet3game.herokuapp.com/
 
-#techs in use
-React
-Node(Express.js)
+# techs in use
+React.
+Node(Express.js).
 socket.io
 
-#to clone into your machine
+# clone into your machine
 git clone https://github.com/mazerunner619/tic-tac-toe-p2p.git
 
-#install dependencies 
-npm i ( in the root folder of cloned project [installs the node(backend) dependencies])
+# install dependencies 
+npm i ( in the root folder [installs the node(backend) dependencies])
 npm i (in the T3 directory [install the react(frontEnd) dependencies])
 
 # Getting Started with Create React App
