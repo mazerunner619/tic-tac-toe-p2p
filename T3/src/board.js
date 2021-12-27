@@ -67,7 +67,7 @@ export default function Board(){
     // let onlinePlayers = [];
 
     useEffect(()=>{
-        setTimeout(()=>setLanding("none"),4000);
+        setTimeout(()=>setLanding("none"),3000);
     }, []);
 
     useEffect(() => {
@@ -80,7 +80,7 @@ export default function Board(){
             });
 
             socket.on('refresh-list', ({onlinePlayers, playerStatus}) => {
-                console.log('Atif', onlinePlayers, playerStatus)
+                // console.log('Atif', onlinePlayers, playerStatus)
                 setOnlinePlayers([]);
                 for (const key in onlinePlayers) {
                     if(key !== socket.id)
@@ -106,7 +106,7 @@ export default function Board(){
                 message : `${data.playerName} declined to accept your challenge`,
                 severity : "error"
             });
-            console.log(data.playerName+' rejected your request');
+            // console.log(data.playerName+' rejected your request');
             setOpponent({id : null, name : null});
             //waiting over
         });
@@ -285,7 +285,7 @@ export default function Board(){
         <div>
 <div className = "landing" style={{display : landing}}>
 
-    <div> Let's TIC-TAC-TOE</div>
+    <div>LET'S TIC-TAC-TOE</div>
 </div>
 
         <div className="contents" style={{display : !landing}}>            

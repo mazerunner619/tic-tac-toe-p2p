@@ -150,34 +150,33 @@ body {
   width: 100vw;
   height: 100vh;
   animation-name: landingPage;
-  animation-duration: 4s;
-  animation-iteration-count: 2;
+  animation-duration: 3s;
+  /* animation-iteration-count: 2; */
 }
 
 @keyframes landingPage {
-  0% {
+  from {
     background-color: black;
-    color: white;
   }
-  50% {
-    background-color: #b6416c;
-    color: black;
-  }
-  100% {
-    background-color: black;
-    color: white;
+  to {
+    background-color: white;
   }
 }
 
 @keyframes landingPageText {
-  from {
+  0% {
+    color: white;
     font-size: 0;
     filter: blur(3px);
     text-shadow: 10px 10px 5px black;
   }
-  to {
+  30% {
+    color: black;
+    font-size: 130%;
+  }
+  100% {
+    font-size: 130%;
     filter: blur(0px) brightness(2000%);
-    font-size: 150%;
     text-shadow: -4px -4px 5px black;
   }
 }
@@ -185,10 +184,9 @@ body {
 .landing div {
   padding: 20px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
+  top: 40%;
+  left: 0;
+  transform: rotateZ(90deg);
   text-decoration: wavy;
   font-family: "Montserrat", sans-serif;
   animation-name: landingPageText;
