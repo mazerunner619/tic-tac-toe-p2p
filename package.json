@@ -5,11 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server.js",
     "client": "npm start --prefix T3",
+    "clientinstall": "npm install --prefix T3",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "render-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix T3 && npm run build --prefix T3",
+    "render-postbuild": "npm install --prefix T3 && npm run build --prefix T3",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix T3 && npm run build --prefix T3"
   },
   "author": "",
