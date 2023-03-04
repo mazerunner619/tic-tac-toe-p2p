@@ -320,6 +320,7 @@ export default function Board() {
             className="startButton"
             color="secondary"
             onClick={enterTheGame}
+            id="battle-button"
           >
             Battle
           </Button>

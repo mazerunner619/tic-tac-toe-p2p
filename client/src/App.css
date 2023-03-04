@@ -1,13 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Iso&display=swap');
 
 html,
 body {
   margin: 0;
   width: 100vw;
   height: 100vh;
-  background: grey;
+  /* background: grey; */
   box-sizing: border-box;
+  background-color: rgba(255, 0, 0, 0.524);
   overflow-x: hidden;
+}
+
+#battle-button{
+  background: rgb(172, 255, 47);
+  color: black;
+  font-family: fantasy;
+  font-weight: bolder;
 }
 
 .contents {
@@ -40,7 +49,7 @@ body {
 
 .content {
   display: inline;
-  border: 1px solid yellow;
+  border: 1px solid greenyellow;
   background-color: #b6416c;
   position: absolute;
   width: 100%;
@@ -55,10 +64,9 @@ body {
 
 .pointsT {
   border-radius: 10px;
-  border: 5px solid rgb(223, 59, 86);
+  border: 5px solid greenyellow;
   background: white;
-  color: green;
-  color: rgb(223, 59, 86);
+  color: greenyellow;
   text-align: center;
   /* word-spacing: ; */
   font-family: "Montserrat", sans-serif;
@@ -67,15 +75,15 @@ body {
   grid-row: 5/6;
 }
 .heading {
-  box-shadow: 5px 5px 50px 5px rgb(148, 80, 80);
-  background-color: rgb(141, 63, 76);
+  background-color: black;
   height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: rgba(255, 255, 255, 0.822);
+  font-size: calc(25px + 2vmin);
+  color: greenyellow;
+  font-family: 'Rubik Iso', cursive;
   margin: 0 0 1% 0;
   grid-column: 1/4;
   grid-row: 1/2;
@@ -90,9 +98,9 @@ body {
 .entry-field {
   font-family: "Montserrat", sans-serif;
   font-size: 300%;
-  border: 3px solid rgb(223, 59, 86);
+  border: 3px solid greenyellow;
   border-radius: 10px;
-  color: rgb(212, 86, 107);
+  color: greenyellow;
   text-align: center;
   margin: 2% auto;
   display: block;
@@ -113,6 +121,7 @@ body {
 
 .startButton {
   width: 100%;
+  color : greenyellow;
 }
 
 .startButton:hover {
@@ -120,8 +129,7 @@ body {
 }
 .creator {
   background-color: rgb(141, 63, 76);
-  color: rgba(255, 255, 255, 0.822);
-
+  color: greenyellow;
   text-align: right;
   width: 100%;
   position: absolute;
@@ -136,7 +144,7 @@ body {
   border-radius: 10px;
   padding-left: 10px;
   background-color: black;
-  color: lightgreen;
+  color: greenyellow;
   margin-bottom: 5px;
   transition-duration: 0.2s;
 }
@@ -165,13 +173,13 @@ body {
 
 @keyframes landingPageText {
   0% {
-    color: white;
+    color: greenyellow;
     font-size: 0;
     filter: blur(3px);
     text-shadow: 10px 10px 5px black;
   }
   30% {
-    color: black;
+    color: greenyellow;
     font-size: 130%;
   }
   100% {
@@ -211,7 +219,7 @@ body {
   display: inline;
 }
 .refresh-button {
-  color: lightgreen;
+  color: greenyellow;
   text-align: center;
   margin: 10px auto;
   /* font-size: 200%; */
